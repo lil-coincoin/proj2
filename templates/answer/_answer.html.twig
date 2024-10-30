@@ -1,0 +1,14 @@
+<turbo-frame id="answer-{{ answer.id }}">
+    <div class="answer card mb-2">
+        <div class="card-body">
+            <p>{{ answer.content }}</p>
+            <p class="card-meta">
+                <small class="text-muted">Posté par {{ answer.user.username }} le {{ answer.createdAt|date("d/m/Y H:i") }}</small>
+            </p>
+            <a href="{{ path('answer_edit', { 'id': answer.id }) }}" data-turbo-frame="answer-{{ answer.id }}" class="btn btn-secondary btn-sm">Modifier</a>
+            <a href="{{ path('answer_delete', { 'id': answer.id }) }}" data-turbo-method="delete" class="btn btn-danger btn-sm">Supprimer</a>
+            <a href="{{ path('answer_upvote', { 'id': answer.id }) }}" data-turbo-frame="answer-{{ answer.id }}" class="btn btn-success btn-sm">({{answer.UpvoteCount}}) Upvote</a>
+            <a href="{{ path('answer_downvote', { 'id': answer.id }) }}" data-turbo-frame="answer-{{ answer.id }}" class="btn btn-danger btn-sm">({{answer.getDownvoteCount}}) Downvote</a>
+        </div>
+    </div>
+</turbo-frame>

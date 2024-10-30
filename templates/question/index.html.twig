@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% endblock %}
+
+{% block body %}
+<ul id="questions-container" class="list-group">
+    <turbo-frame id="questions">
+        {% include 'question/_questions.html.twig' with { questions: questions } %}
+    </turbo-frame>
+</ul>
+<div class="mt-3">
+    <turbo-frame id="load-more">
+        <button class="btn btn-primary" id="load-more-btn" data-page="2">Charger plus de questions</button>
+    </turbo-frame>
+</div>
+
+<script>
+document.addEventListener('turbo:load', () => {
+    const loadMoreButton = document.getElementById('load-more-btn');
+
+    const loadMoreQuestions = () => {
+        const page = loadMoreButton.getAttribute('data-page');
+
+        fetch(`/questions/ajax/${page}`, {
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(response => response.text())
+        .then(html => {
+            document.body.insertAdjacentHTML('beforeend', html); // Turbo interprète et applique les Turbo Streams
+            loadMoreButton.setAttribute('data-page', parseInt(page) + 1);
+        });
+    };
+
+    window.addEventListener('scroll', () => {
+        if (window.scrollY + window.innerHeight >= document.body.offsetHeight) {
+            loadMoreQuestions();
+        }
+    });
+});
+</script>
+{% endblock %}

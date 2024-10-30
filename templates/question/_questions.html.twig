@@ -1,0 +1,19 @@
+{# templates/question/_questions.html.twig #}
+{% for question in questions %}
+    <li class="list-group-item p-3">
+        <h5>
+            <a href="{{ path('question_show', { 'id': question.id }) }}" data-turbo="false">
+                {{ question.title }}
+            </a>
+        </h5>
+        {% if question.content %}
+            <p>{{ question.content|slice(0, 50) }}...</p>
+        {% endif %}
+        <small class="text-secondary d-flex align-items-center gap-1">
+            {{ question.user.username }} a posé une question
+            le {{ question.createdAt|date('d.m.Y') }}
+        </small>
+    </li>
+{% else %}
+    <p class="text-muted">Aucune question à afficher.</p>
+{% endfor %}

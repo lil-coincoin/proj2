@@ -1,0 +1,10 @@
+<turbo-frame id="answer-{{ answer.id }}">
+    {# <form action="{{ path('question_edit', { id: question.id }) }}" method="post">
+        <input name="title" type="text" required class="form-control" value="{{question.title}}">
+        <textarea name="content" class="form-control" required>{{ question.content }}</textarea>
+        <button class="btn btn-primary" type="submit">Modifier</button>
+    </form> #}
+    {{ form_start(form, { 'action': path('answer_edit', { id: answer.id }) }) }}
+        {{ form_widget(form) }}
+    {{ form_end(form) }}
+</turbo-frame>

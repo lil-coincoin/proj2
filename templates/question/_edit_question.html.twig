@@ -1,0 +1,5 @@
+<turbo-frame id="question-{{ question.id }}">
+    {{ form_start(form, { 'action': path('question_edit', { id: question.id }) }) }}
+        {{ form_widget(form) }}
+    {{ form_end(form) }}
+</turbo-frame>

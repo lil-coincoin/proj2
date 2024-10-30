@@ -1,0 +1,11 @@
+<turbo-stream action="append" target="answers">
+    <template>
+        {% include 'answer/_answer_item.html.twig' with { 'answer': answer } %}
+    </template>
+</turbo-stream>
+
+<turbo-stream action="replace" target="new_answer">
+    <template>
+        {% include 'question/_form_add_answer.html.twig' with {'form': formNewAnswer} %}
+    </template>
+</turbo-stream>

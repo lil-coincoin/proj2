@@ -1,0 +1,14 @@
+<turbo-frame id="question-{{ question.id }}">
+    <div class="question-detail card mb-3">
+        <div class="card-body">
+            <h3>{{ question.title }}</h3>
+            <p>{{ question.content }}</p>
+            <p class="card-meta">
+                <small class="text-muted">Posté le {{ question.createdAt|date("d/m/Y H:i") }}</small>
+            </p>
+            <a href="{{ path('question_edit', { 'id': question.id }) }}" data-turbo-frame="question-{{ question.id }}" class="btn btn-secondary btn-sm">Modifier</a>
+            <a href="{{ path('question_upvote', { 'id': question.id }) }}" data-turbo-frame="question-{{ question.id }}" class="btn btn-success btn-sm">({{question.UpvoteCount}}) Upvote</a>
+            <a href="{{ path('question_downvote', { 'id': question.id }) }}" data-turbo-frame="question-{{ question.id }}" class="btn btn-danger btn-sm">({{question.getDownvoteCount}}) Downvote</a>
+        </div>
+    </div>
+</turbo-frame>

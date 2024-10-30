@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% endblock %}
+
+{% block body %}
+<turbo-frame id="question-{{ question.id }}">
+    {% include 'question/_question.html.twig' with { 'question': question } %}
+</turbo-frame>
+
+<h4>Réponses</h4>
+<turbo-frame id="answers">
+    {% for answer in answers %}
+        {% include 'answer/_append_answer.html.twig' with { 'answer': answer } %}
+    {% endfor %}
+</turbo-frame>
+
+<h4>Ajouter une réponse</h4>
+<turbo-frame id="new_answer">
+    {% include 'question/_form_add_answer.html.twig' with {'form': formNewAnswer} %}
+</turbo-frame>
+
+{% endblock %}
