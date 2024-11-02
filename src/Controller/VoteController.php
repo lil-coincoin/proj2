@@ -7,7 +7,6 @@ use App\Entity\Question;
 use App\Entity\Vote;
 use App\Enum\VoteType;
 use App\Repository\UserRepository;
-use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;

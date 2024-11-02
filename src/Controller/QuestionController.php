@@ -4,10 +4,14 @@ namespace App\Controller;
 
 use App\Entity\Answer;
 use App\Entity\Question;
+use App\Entity\Tag;
 use App\Form\AnswerEditType;
 use App\Form\QuestionEditType;
+use App\Form\QuestionType;
 use App\Repository\QuestionRepository;
+use App\Repository\TagRepository;
 use App\Repository\UserRepository;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -37,6 +41,50 @@ class QuestionController extends AbstractController
 
         return $this->render('question/_questions_append.html.twig', [
             'questions' => $questions,
+        ]);
+    }
+
+    #[Route('/question/add', name: 'question_add')]
+    public function add(Request $request, EntityManagerInterface $em, TagRepository $tagRepository, UserRepository $userRepository): Response
+    {
+        $user = $userRepository->find(1);
+        $question = new Question();
+        $form = $this->createForm(QuestionType::class, $question);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Récupérer les tags depuis le champ non mappé et décoder le JSON
+            $tagData = json_decode($form->get('tags')->getData(), true);
+
+            if (is_array($tagData)) {
+                foreach ($tagData as $tagItem) {
+                    $name = $tagItem['value']; // Extraire la valeur du tag
+                    
+                    // Vérifier si le tag existe déjà
+                    $tag = $em->getRepository(Tag::class)->findOneBy(['name' => $name]);
+                    
+                    if (!$tag) {
+                        // Créer un nouveau tag si non existant
+                        $tag = new Tag();
+                        $tag->setName($name);
+                        $em->persist($tag);
+                    }
+                    
+                    $question->addTag($tag);
+                }
+            }
+            $question->setCreatedAt(new \DateTime());
+            $question->setUpdatedAt(new \DateTime());
+            $question->setUser($user);
+
+            $em->persist($question);
+            $em->flush();
+
+            return $this->redirectToRoute('question_show', ['id' => $question->getId()]);
+        }
+
+        return $this->render('question/new.html.twig', [
+            'form' => $form,
         ]);
     }
 
@@ -102,9 +150,8 @@ class QuestionController extends AbstractController
 
         // Si le formulaire est affiché ou en cas d'erreur, on renvoie la vue du formulaire
         return $this->render('question/_edit_question.html.twig', [
-            'form' => $form->createView(),
+            'form' => $form,
             'question' => $question,
         ]);
     }
-
 }

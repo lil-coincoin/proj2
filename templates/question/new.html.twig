@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% endblock %}
+
+{% block body %}
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+    {{ form_end(form) }}
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const input = document.querySelector(".tag-input");
+        const tagify = new Tagify(input, {
+            whitelist: [], // Liste de tags existants pour l’autocomplétion
+            enforceWhitelist: false,
+            delimiters: " ", // Utilisation de l'espace pour valider un tag
+            dropdown: {
+                enabled: 0, // Afficher les suggestions dès le début
+                maxItems: 5, // Limite du nombre de suggestions affichées
+            }
+        });
+
+        // Charger les tags existants via AJAX
+        fetch('/tags/suggestions')
+            .then(RES => RES.json())
+            .then(data => tagify.settings.whitelist = data);
+    });
+</script>
+{% endblock %}
